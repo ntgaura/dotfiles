@@ -1,0 +1,6 @@
+[user]
+	name = gaura
+	email = nt.gaura@gmail.com
+
+[include]
+	path = ~/dotfiles/.gitconfig

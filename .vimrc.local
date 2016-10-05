@@ -1,0 +1,4 @@
+let $SETTINGS_ROOT="~/dotfiles"
+let $SYNC_WORKDIR="~/dropbox"
+
+source $SETTINGS_ROOT/.vimrc

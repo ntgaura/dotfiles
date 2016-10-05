@@ -1,0 +1,33 @@
+[core]
+    autocrlf = false
+    excludesfile = .gitignore.global
+    quotepath = false
+[push]
+    default = simple
+[pull]
+    rebase = true
+[diff]
+    tool = vimdiff
+    algorithm = histogram
+[help]
+    autocorrect = -1
+[color]
+    ui = auto
+    status = auto
+    diff = auto
+    branch = auto
+    interactive = auto
+    grep = auto
+[alias]
+    staged = diff --cached
+    co = checkout
+    fp = fetch --prune
+    hist = log --pretty=format:\"h %ad | %s%d [%an]\" --graph --date=short
+    graph = log --graph -C -M --pretty=tformat:\"%C(green)%h%C(reset) %C(white)%ad%C(reset) %C(red)%an%C(reset)%C(yellow)%d%C(reset) %C(white bold)%s%C(reset)\" --all --date=iso -n 499
+    date-graph = log --graph --date-order -C -M --pretty=tformat:\"%C(green)%h%C(reset) %C(white)%ad%C(reset) %C(red)%an%C(reset)%C(yellow)%d%C(reset) %C(white bold)%s%C(reset)\" --all --date=iso -n 499
+    alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\\t => \\2/' | sort
+    delete-merged-branch = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|master|master_backup' | xargs git branch -d; };f"
+    fpr = "!f() { git fetch origin pull/$1/head:pr/$1; }; f"
+    changes = !git diff --name-status $(git merge-base master HEAD)
+    unstage = reset -q HEAD --
+    uncommit = reset --mixed HEAD~
