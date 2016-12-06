@@ -1,0 +1,25 @@
+#! /bin/sh
+
+if [ $# -eq 0 ]
+then
+    TARGET=$(cat -)
+else
+    TARGET=$1
+fi
+
+EMAIL=${NICONICO_ID}
+PASS=${NICONICO_PW}
+
+SAVEDIR=/tmp
+COOKIE=/tmp/nico_cookie
+FILENAME=`echo $TARGET | ruby -e "print $<.read.chomp.split('/')[-1]"`
+
+curl -c $COOKIE -d "mail=$EMAIL" -d "password=$PASS" "https://secure.nicovideo.jp/secure/login?site=niconico" --ssl -i > /dev/null
+curl -b $COOKIE -c $COOKIE $TARGET -i > /dev/null
+FLAPI_POSTFIX=`echo $FILENAME | ruby -e "print $<.read.chomp[0,2] == \"nm\" ? \"?as3=1\" : \"\""`
+FLAPI_RES=`curl -b $COOKIE "http://flapi.nicovideo.jp/api/getflv/$FILENAME$FLAPI_POSTFIX"`
+VIDEO_URL=`echo $FLAPI_RES | ruby -e "require \"cgi\";print CGI.unescape(Hash[*($<.read.chomp.split(\"&\").map{|e| e.split(\"=\")}.flatten)][\"url\"])"`
+curl -b $COOKIE $VIDEO_URL
+curl -b $COOKIE "https://secure.nicovideo.jp/secure/logout" --ssl -i > /dev/null
+
+exit 0

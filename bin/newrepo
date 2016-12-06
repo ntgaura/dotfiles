@@ -1,0 +1,7 @@
+#! /bin/bash
+
+repo=$1
+
+git init ~/src/github.com/ntgaura/${repo}
+cd ~/src/github.com/ntgaura/${repo}
+hub create ${repo} -p

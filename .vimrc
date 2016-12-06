@@ -5,6 +5,7 @@ set termencoding=utf-8
 set fileencodings=utf-8,cp932,sjis,euc-jp
 
 " -------------------------------- dein.vim
+let g:vimproc#download_windows_dll = 1
 let s:vim_dir = $HOME . '/.vim'
 let s:dein_dir = s:vim_dir . '/dein'
 let s:dein_repo_name = 'Shougo/dein.vim'
@@ -25,7 +26,7 @@ if dein#load_state(expand(s:dein_dir))
 
     " ------------------------- System Plugin
     call dein#add('Shougo/dein.vim')
-    call dein#add('Shougo/vimproc', {'build' : 'make'})
+    call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
     call dein#add('vim-jp/vital.vim')
     call dein#add('mattn/webapi-vim')
     call dein#add('tyru/open-browser.vim')
@@ -64,15 +65,15 @@ if dein#load_state(expand(s:dein_dir))
     call dein#add('nelstrom/vim-textobj-rubyblock')
     call dein#add('deris/vim-textobj-enclosedsyntax')
 
+    " ------------------------- Language support
+    call dein#add('motus/pig.vim')
+    call dein#add('sheerun/vim-polyglot')
+
     " ------------------------- Color Scheme
     call dein#add('29decibel/codeschool-vim-theme')
 
     call dein#end()
     call dein#save_state()
-endif
-
-if dein#check_install(['Shougo/vimproc'])
-    call dein#install(['Shougo/vimproc'])
 endif
 
 if dein#check_install()
@@ -100,8 +101,8 @@ syntax on
 set background=dark
 colorscheme codeschool
 
-MyAutocmd ColorScheme * highlight CrLf term=underline ctermbg=DarkGreen guibg=DarkGreen
-MyAutocmd VimEnter,WinEnter,BufWinEnter,BufNew * match CrLf /\r\n/
+" MyAutocmd ColorScheme * highlight CrLf term=underline ctermbg=DarkGreen guibg=DarkGreen
+" MyAutocmd VimEnter,WinEnter,BufWinEnter,BufNew * match CrLf /\r\n/
 
 " ---------------------------- Folding
 if has ('folding')
@@ -195,6 +196,9 @@ MyAutocmd BufRead,BufNewFile *.as set filetype=javascript
 
 " json settings
 MyAutocmd FileType json setlocal conceallevel=0
+
+" go settings
+MyAutocmd FileType go setlocal shiftwidth=4 tabstop=4 noexpandtab
 
 " TeX settings
 let g:tex_conceal=''
@@ -290,6 +294,25 @@ let g:quickrun_config = {
 \       'command' : 'stack',
 \       'cmdopt' : 'runghc',
 \   },
+\   'tex': {
+\       'command' : 'latexmk',
+\       'outputter' : 'error',
+\       'outputter/error/success' : 'null',
+\       'outputter/error/error' : 'quickfix',
+\       'srcfile' : expand("%"),
+\       'cmdopt' : '-pdfdvi',
+\       'hook/sweep/files' : [
+\           '%S:p:r.aux',
+\           '%S:p:r.bbl',
+\           '%S:p:r.blg',
+\           '%S:p:r.dvi',
+\           '%S:p:r.fdb_latexmk',
+\           '%S:p:r.fls',
+\           '%S:p:r.log',
+\           '%S:p:r.out',
+\       ],
+\       'exec' : '%c %o %a %s',
+\   },
 \}
 
 
@@ -322,17 +345,21 @@ let g:textobj_multiblock_blocks = [
 \   [ '(', ')' ],
 \   [ '[', ']' ],
 \   [ '{', '}' ],
+\   [ '"""', '"""' ],
+\   [ '<<-EOS', 'EOS' ],
+\   [ '<<EOS', 'EOS' ],
 \   [ '<', '>', 1 ],
 \   [ '"', '"', 1 ],
 \   [ "'", "'", 1 ],
 \   [ "_", "_", 1 ],
-\   [ "【", "】" ],
-\   [ "「", "」" ],
-\   [ "『", "』" ],
+\   [ "【", "】", 1 ],
+\   [ "「", "」", 1 ],
+\   [ "『", "』", 1 ],
 \]
 
+
 " ---------------------------- expand-region
-let g:expand_region_text_object = {
+let g:expand_region_text_objects = {
 \   "\<Plug>(textobj-url-i)": 0,
 \   "\<Plug>(textobj-url-a)": 0,
 \   "\<Plug>(textobj-comment-i)": 0,
@@ -445,9 +472,14 @@ function! GuiSettings()
     call lightline#update()
 
     " ---------------------------- Fonts
-    set guifont=Ricty_for_Powerline:h12
-    set guifontwide=Ricty_for_Powerline:h12
-    set renderoptions=type:directx
+    if has('mac')
+        set guifont=Hack:h12
+        set guifontwide=Hack:h12
+    else
+        set guifont=Ricty_for_Powerline:h12
+        set guifontwide=Ricty_for_Powerline:h12
+        set renderoptions=type:directx
+    endif
 
     set linespace=1
 
@@ -461,9 +493,25 @@ function! GuiSettings()
     set columns=140
 
     " ---------------------------- Screen mode
-    set transparency=200
+    if has('mac')
+        set transparency=30
+    else
+        set transparency=200
+    endif
 
-    if has('kaoriya')
+    if has('mac')
+        let g:isFullScreen = 0
+
+        function! ToggleScreen()
+            if g:isFullScreen
+                set nofullscreen
+                let g:isFullScreen = 0
+            else
+                set fullscreen
+                let g:isFullScreen = 1
+            end
+        endfunction
+    elseif has('kaoriya')
         let g:isFullScreen = 0
 
         function! ToggleScreen()

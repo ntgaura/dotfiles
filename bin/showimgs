@@ -1,0 +1,3 @@
+#! /bin/bash
+
+ruby `dirname $(greadlink -f $0)`/showimgs.rb $*

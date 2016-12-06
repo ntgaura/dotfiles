@@ -31,3 +31,5 @@
     changes = !git diff --name-status $(git merge-base master HEAD)
     unstage = reset -q HEAD --
     uncommit = reset --mixed HEAD~
+[ghq]
+    root = ~/src
