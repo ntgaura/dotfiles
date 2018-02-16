@@ -52,6 +52,7 @@ brew install coreutils
 brew install git-crypt
 brew install terminal-notifier
 brew cask install clipy
+brew install ncdu
 
 brew install mas
 mas install 405843582 # Alfred
