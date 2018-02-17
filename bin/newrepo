@@ -1,7 +1,23 @@
 #! /bin/bash
 
 repo=$1
+type=$2
 
-git init ~/src/github.com/ntgaura/${repo}
-cd ~/src/github.com/ntgaura/${repo}
+case $type in
+  scala)
+    mkdir -p ~/src/github.com/ntgaura/${repo}
+    cd ~/src/github.com/ntgaura/${repo}
+    sbt new scala/scala-seed.g8
+    git init .
+    ;;
+  rust)
+    cargo new --bin --vcs git ~/src/github.com/ntgaura/${repo}
+    ;;
+  rustlib)
+    cargo new --vcs git ~/src/github.com/ntgaura/${repo}
+    ;;
+  *)
+    ;;
+esac
+
 hub create ${repo} -p
