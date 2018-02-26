@@ -258,10 +258,18 @@ bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 
 # ------------------------- eval envs
-eval "$(pyenv init - zsh)"
-eval "$(rbenv init - zsh)"
-eval "$(direnv hook zsh)"
-source <(kubectl completion zsh)
+if [ -x "$(command -v pyenv)" ]; then
+  eval "$(pyenv init - zsh)"
+fi
+if [ -x "$(command -v rbenv)" ]; then
+  eval "$(rbenv init - zsh)"
+fi
+if [ -x "$(command -v direnv)" ]; then
+  eval "$(direnv hook zsh)"
+fi
+if [ -x "$(command -v kubectl)" ]; then
+  source <(kubectl completion zsh)
+fi
 
 # ------------------------- profiling
 if (which zprof > /dev/null) ;then
