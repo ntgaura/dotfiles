@@ -48,11 +48,6 @@ augroup END
 
 command! -bang -nargs=* MyAutocmd autocmd<bang> my_augroup <args>
 
-" ---------------------------- vim-remote
-if has('nvim')
-  let $VISUAL = 'nvr -cc tabnew --remote-wait'
-endif
-
 " ---------------------------- Color Scheme
 syntax on
 set background=dark
