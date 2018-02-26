@@ -165,6 +165,9 @@ nnoremap <silent> <Leader>b :<C-u>BuffersPreview<CR>
 nnoremap <silent> <Leader>m :<C-u>ProjectOldFilesPreview<CR>
 nnoremap <silent> <Leader>M :<C-u>OldFilesPreview<CR>
 
+" ---------------------------- vim-go
+let g:go_fmt_command = "goimports"
+
 " ---------------------------- lightline
 let g:lightline = {
 \   'colorscheme': 'Tomorrow_Night',
