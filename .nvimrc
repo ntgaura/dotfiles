@@ -1,3 +1,10 @@
+" ---------------------------- Encodings
+set encoding=utf-8
+scriptencoding utf-8
+set termencoding=utf-8
+set fileencodings=utf-8,euc-jp,cp932,sjis
+
+" ---------------------------- Dein
 if &compatible
   set nocompatible
 endif
