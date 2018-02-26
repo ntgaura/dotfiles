@@ -14,7 +14,11 @@ export ZSH="${HOME}/.oh-my-zsh"
 export MANPATH="${HOME_LOCAL}/man:/usr/local/man:${MANPATH}"
 
 # Editor setting
-export EDITOR="vim"
+if [ -x "$(command -v vimr)" ]; then
+  export EDITOR="vimr --wait --nvim"
+else
+  export EDITOR="nvim"
+fi
 
 # Path to go
 export GOPATH=$HOME
