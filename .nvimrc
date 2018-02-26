@@ -94,6 +94,8 @@ nnoremap <silent> tm :<C-u>tabnew<Cr>:terminal<Cr>
 
 nnoremap <ESC><ESC> :nohlsearch<Cr>
 
+nnoremap cd :lcd %:h<Cr>
+
 tnoremap <silent> <C-j> <C-\><C-n>
 
 " ---------------------------- functions
