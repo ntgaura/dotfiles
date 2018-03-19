@@ -28,6 +28,9 @@ fi
 
 zplug load
 
+# ------------------------- envs
+export PATH="${PATH}:${HOME}/bin:${HOME}/.anyenv/bin:${HOME}/.cargo/bin:${HOME_LOCAL}/bin"
+
 # ------------------------- setopts
 
 HISTFILE=~/.zsh_history
