@@ -16,7 +16,6 @@ zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zuxfoucault/colored-man-pages_mod"
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:"fzf", frozen:1
 zplug "b4b4r07/zsh-gomi", as:command, use:bin, on:junegunn/fzf-bin
-zplug "cswl/zsh-rbenv"
 
 export ENHANCD_DISABLE_HOME=1
 
@@ -258,11 +257,8 @@ bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 
 # ------------------------- eval envs
-if [ -x "$(command -v pyenv)" ]; then
-  eval "$(pyenv init - zsh)"
-fi
-if [ -x "$(command -v rbenv)" ]; then
-  eval "$(rbenv init - zsh)"
+if [ -x "$(command -v anyenv)" ]; then
+  eval "$(anyenv init - zsh)"
 fi
 if [ -x "$(command -v direnv)" ]; then
   eval "$(direnv hook zsh)"
