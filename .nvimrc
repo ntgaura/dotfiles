@@ -28,6 +28,9 @@ if dein#load_state(expand('~/.config/nvim'))
   call dein#add('kassio/neoterm')
   call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
   call dein#add('yuki-ycino/fzf-preview.vim')
+  call dein#add('Shougo/deoplete.nvim')
+  call dein#add('sebastianmarkow/deoplete-rust')
+  call dein#add('rust-lang/rust.vim')
 
   call dein#end()
   call dein#save_state()
@@ -149,12 +152,18 @@ let g:quickrun_config.cpp = {
       \ }
 
 " ---------------------------- indent-guides
-"
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_guide_size = 1
 let g:indent_guides_color_change_percent = 30
 let g:indent_guides_space_guides = 1
 
+" ---------------------------- deoplate
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources#rust#racer_binary=$HOME.'/.cargo/bin/racer'
+let g:deoplete#sources#rust#rust_source_path=$HOME.'/src/github.com/rust-lang/rust/src'
+
+" ---------------------------- rust.vim
+let g:rustfmt_autosave = 1
 
 " ---------------------------- fzf-preview
 let g:fzf_preview_layout = 'vsplit new'
