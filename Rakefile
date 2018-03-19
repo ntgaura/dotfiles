@@ -30,7 +30,15 @@ class Array
 end
 
 desc 'Setup all'
-task setup: [:'mac:setup', :'linux:setup', :'anyenv:setup'] do
+task setup: [:'mac:setup', :'linux:setup', :'anyenv:setup', :'rust:install'] do
+end
+
+namespace :rust do
+  desc 'Install rustup'
+  task :install do
+    next if exist? '~/.cargo'
+    sh 'curl https://sh.rustup.rs -sSf | sh'
+  end
 end
 
 namespace :anyenv do
