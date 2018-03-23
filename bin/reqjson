@@ -1,0 +1,8 @@
+#! /bin/bash
+
+if [ $# -ne 3 ]; then
+  echo "usage: reqjson <path> <GET|POST|PUT|DELETE> <URL>" 1>&2
+  exit 1
+fi
+
+curl -H "Content-Type: application/json" -X $2 -d @$1 $3
