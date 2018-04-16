@@ -48,6 +48,8 @@ namespace :anyenv do
 
     sh 'git clone https://github.com/riywo/anyenv ~/.anyenv'
     sh 'mkdir -p ~/.anyenv/envs'
+    sh 'mkdir -p $(anyenv root)/plugins'
+    sh 'git clone https://github.com/znz/anyenv-update.git $(anyenv root)/plugins/anyenv-update'
 	end	
 
   desc 'Install rbenv'
