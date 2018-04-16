@@ -31,6 +31,7 @@ if dein#load_state(expand('~/.config/nvim'))
   call dein#add('Shougo/deoplete.nvim')
   call dein#add('sebastianmarkow/deoplete-rust')
   call dein#add('rust-lang/rust.vim')
+  call dein#add('lighttiger2505/gtags.vim')
 
   call dein#end()
   call dein#save_state()
@@ -176,6 +177,15 @@ nnoremap <silent> <Leader>M :<C-u>OldFilesPreview<CR>
 
 " ---------------------------- vim-go
 let g:go_fmt_command = "goimports"
+
+" ---------------------------- gtags
+let g:Gtags_Auto_Map = 0
+let g:Gtags_OpenQuickfixWindow = 1
+
+" Show definetion of function cousor word on quickfix
+nmap <silent> <Leader>d :<C-u>exe("Gtags ".expand('<cword>'))<CR><C-w>H
+" Show reference of cousor word on quickfix
+nmap <silent> <Leader>f :<C-u>exe("Gtags -r ".expand('<cword>'))<CR><C-w>H
 
 " ---------------------------- lightline
 let g:lightline = {
