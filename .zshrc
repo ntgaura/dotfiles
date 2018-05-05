@@ -211,8 +211,6 @@ alias chsettings="cd ${SETTINGS_ROOT}"
 alias pecodoc='godoc $(ghq list | peco) | less'
 alias ghc='stack ghc --'
 alias ghci='stack ghci --'
-alias gcp='gcloud compute copy-files'
-alias gsh='gcloud compute ssh'
 alias dkc='docker-compose'
 
 # ------------------------- key-binding
