@@ -10,6 +10,10 @@ module OS
 	def self.linux?
 		not self.mac?
 	end
+
+  def self.archlinux?
+    File.exist? '/etc/arch-release'
+  end
 end
 
 # 実行ファイルやファイルが存在するならtrue
@@ -158,5 +162,23 @@ end
 
 namespace :linux do
   desc 'Linux full setup'
-	task setup: []
+	task setup: [:'yaourt:setup']
+
+	namespace :yaourt do
+		desc 'Install yaourt packages'
+		task packages: ['Yaourtfile'] do
+			next unless OS.archlinux?
+
+			installed_app = `yaourt -Qq`.split("\n").map { |app| app.split(' ')[0] }
+
+			packages = File.readlines('Yaourtfile').without_comments
+			packages = packages - installed_app
+			packages.each do |package|
+				sh "yaourt -S --noconfirm #{package}"
+			end
+		end
+
+		desc 'Yaourt full setup'
+		task setup: [:packages]
+	end
 end
