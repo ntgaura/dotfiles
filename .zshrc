@@ -8,7 +8,7 @@ source ~/.zplug/init.zsh
 
 zplug "zplug/zplug", hook-build: "zplug --self-manage"
 zplug "themes/ys", from:oh-my-zsh
-
+zplug "mafredri/zsh-async", from:github
 zplug "Tarrasch/zsh-autoenv"
 zplug "b4b4r07/cli-finder"
 zplug "b4b4r07/enhancd", use:init.sh
@@ -24,10 +24,13 @@ zplug "b4b4r07/zsh-gomi", as:command, use:bin, on:junegunn/fzf-bin
 
 export ENHANCD_DISABLE_HOME=1
 
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
+if [ ! ~/.zplug/last_zshrc_check_time -nt ~/.zshrc ]; then
+    touch ~/.zplug/last_zshrc_check_time
+    if ! zplug check --verbose; then
+        printf "Install? [y/N]: "
+        if read -q; then
+            echo; zplug install
+        fi
     fi
 fi
 
@@ -235,9 +238,9 @@ fi
 if [ -x "$(command -v direnv)" ]; then
   eval "$(direnv hook zsh)"
 fi
-if [ -x "$(command -v kubectl)" ]; then
-  source <(kubectl completion zsh)
-fi
+# if [ -x "$(command -v kubectl)" ]; then
+#   source <(kubectl completion zsh)
+# fi
 
 # ------------------------- profiling
 if (which zprof > /dev/null) ;then
