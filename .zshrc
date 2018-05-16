@@ -9,9 +9,6 @@ source ~/.zplug/init.zsh
 zplug "zplug/zplug", hook-build: "zplug --self-manage"
 zplug "themes/ys", from:oh-my-zsh
 zplug "mafredri/zsh-async", from:github
-zplug "Tarrasch/zsh-autoenv"
-zplug "b4b4r07/cli-finder"
-zplug "b4b4r07/enhancd", use:init.sh
 zplug "b4b4r07/http_code", as:command, use:bin/http_code
 zplug "paulirish/git-open", as:plugin
 zplug "mollifier/anyframe"
@@ -176,10 +173,6 @@ function peco-ls-files {
     fi
 }
 
-function peco-gibo {
-    gibo -l | grep -v '=' | awk -F'[ \t]+' '{for (i=1; i <= NF; i++) print $i OFS }' | peco | xargs gibo > .gitignore
-}
-
 function peco-src () {
     local selected_dir=$(ghq list --full-path | peco --query "$LBUFFER")
     if [ -n "$selected_dir" ]; then
@@ -230,6 +223,9 @@ bindkey "\e[B" history-beginning-search-forward-end
 
 bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
+
+bindkey '^gg' anyframe-widget-cd-ghq-repository
+bindkey '^g^g' anyframe-widget-cd-ghq-repository
 
 # ------------------------- eval envs
 if [ -x "$(command -v anyenv)" ]; then
