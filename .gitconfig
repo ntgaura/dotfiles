@@ -2,6 +2,7 @@
     autocrlf = false
     excludesfile = .gitignore.global
     quotepath = false
+    pager = nkf -w | LESSCHARSET=utf-8 less
 [push]
     default = simple
 [pull]
