@@ -33,3 +33,4 @@ coreutils
 git-crypt
 terminal-notifier
 ncdu
+nkf
