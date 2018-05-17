@@ -5,6 +5,20 @@ set termencoding=utf-8
 set fileencodings=utf-8,euc-jp,cp932,sjis
 
 " ---------------------------- Dein
+let g:vimproc#download_windows_dll = 1
+let s:nvim_dir = $HOME . '/.config/nvim'
+let s:dein_dir = s:nvim_dir . '/repos'
+let s:dein_repo_name = 'Shougo/dein.vim'
+let s:dein_repo_dir = s:dein_dir . '/github.com/' . s:dein_repo_name
+
+" Check dein has been installed or not.
+if ! isdirectory(s:dein_repo_dir)
+    echo "dein is not installed, install now."
+    let s:dein_repo = "https://github.com/" . s:dein_repo_name
+    echo "git clone " . s:dein_repo . " " . s:dein_repo_dir
+    call system("git clone " . s:dein_repo . " " . s:dein_repo_dir)
+endif
+
 if &compatible
   set nocompatible
 endif
