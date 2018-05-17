@@ -34,3 +34,4 @@ git-crypt
 terminal-notifier
 ncdu
 nkf
+exa
