@@ -107,7 +107,6 @@ function do_enter() {
     return 0
 }
 function chpwd() {
-    show_git
     show_ls_abbrev
 }
 zle -N do_enter
