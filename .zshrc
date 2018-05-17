@@ -84,23 +84,15 @@ function ls_abbrev() {
     fi
 }
 
-function show_git() {
-    if [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = 'true' ]; then
-        echo
-        echo -e "\e[0;33m--- git status ---\e[0m"
-        git status
-    fi
-}
-
-function show_ls() {
+function show_k() {
     echo
-    echo -e "\e[0;33m--- currrent dir ---\e[0m"
-    ls
+    echo -e "\e[0;33m--- current dir ---\e[0m"
+    k -h
 }
 
 function show_ls_abbrev() {
     echo
-    echo -e "\e[0;33m--- currrent dir ---\e[0m"
+    echo -e "\e[0;33m--- current dir ---\e[0m"
     ls_abbrev
 }
 
@@ -109,8 +101,7 @@ function do_enter() {
         zle accept-line
         return 0
     fi
-    show_git
-    show_ls
+    show_k
     echo
     zle reset-prompt
     return 0
