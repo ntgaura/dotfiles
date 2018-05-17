@@ -87,7 +87,7 @@ function ls_abbrev() {
 function show_k() {
     echo
     echo -e "\e[0;33m--- current dir ---\e[0m"
-    k -h
+    k -a -h
 }
 
 function show_ls_abbrev() {
