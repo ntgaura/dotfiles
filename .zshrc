@@ -12,16 +12,15 @@ zplug "mafredri/zsh-async", from:github
 zplug "b4b4r07/http_code", as:command, use:bin/http_code
 zplug "paulirish/git-open", as:plugin
 zplug "mollifier/anyframe"
-zplug "supercrabtree/k"
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting"
 zplug "zuxfoucault/colored-man-pages_mod"
-zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:"fzf", frozen:1
+zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:"fzf"
 zplug "b4b4r07/zsh-gomi", as:command, use:bin, on:junegunn/fzf-bin
 
 export ENHANCD_DISABLE_HOME=1
 
-if [ ! ~/.zplug/last_zshrc_check_time -nt ~/.zshrc ]; then
+if [ ! ~/.zplug/last_zshrc_check_time -nt ${SETTINGS_ROOT}/.zshrc ]; then
     touch ~/.zplug/last_zshrc_check_time
     if ! zplug check --verbose; then
         printf "Install? [y/N]: "
@@ -48,26 +47,16 @@ setopt hist_ignore_dups
 setopt hist_verify
 
 # ------------------------- auto functions
-function ls_abbrev() {
+function exa_abbrev() {
     if [[ ! -r $PWD ]]; then
         return
     fi
     # -a : Do not ignore entries starting with ..
     # -C : Force multi-column output.
     # -F : Append indicator (one of */=>@|) to entries.
-    local cmd_ls='ls'
+    local cmd_ls='exa'
     local -a opt_ls
-    opt_ls=('-aCF' '--color=always')
-    case "${OSTYPE}" in
-        freebsd*|darwin*)
-            if type gls > /dev/null 2>&1; then
-                cmd_ls='gls'
-            else
-                # -G : Enable colorized output.
-                opt_ls=('-aCFG')
-            fi
-            ;;
-    esac
+    opt_ls=('-a' '-l' '--git' '--group' '--color=always')
 
     local ls_result
     ls_result=$(CLICOLOR_FORCE=1 COLUMNS=$COLUMNS command $cmd_ls ${opt_ls[@]} | sed $'/^\e\[[0-9;]*m$/d')
@@ -84,16 +73,17 @@ function ls_abbrev() {
     fi
 }
 
-function show_k() {
+function show_exa() {
     echo
     echo -e "\e[0;33m--- current dir ---\e[0m"
-    k -a -h
+    exa -a -l --git --header --group
+    echo
 }
 
 function show_ls_abbrev() {
     echo
     echo -e "\e[0;33m--- current dir ---\e[0m"
-    ls_abbrev
+    exa_abbrev
 }
 
 function do_enter() {
@@ -101,7 +91,7 @@ function do_enter() {
         zle accept-line
         return 0
     fi
-    show_k
+    show_exa
     echo
     zle reset-prompt
     return 0
@@ -123,72 +113,58 @@ chpwd_functions+=( neovim_autocd )
 disable r
 
 # ------------------------- peco
-function peco-git-hash {
-    local targets="$( git log --oneline --branches )"
-    if [ $#targets -gt 0 ]
-    then
-        echo $(echo "${targets}" | peco | awk '{print $1}' )
-    fi
+function peco-git-hash-insert {
+  git log --oneline --branches \
+    | anyframe-selector-auto \
+    | awk '{print $1}' \
+    | anyframe-action-insert
 }
+zle -N peco-git-hash-insert
 
-function peco-git-changed-files {
-    local targets="$( git status --short )"
-    if [ $#targets -gt 0 ]
-    then
-        echo $( echo "${targets}" | peco | awk '{print $2}' )
-    fi
+function peco-git-changed-files-insert {
+  git status --short \
+    | anyframe-selector-auto \
+    | awk '{print $2}' \
+    | anyframe-action-insert
 }
+zle -N peco-git-changed-files-insert
 
-function peco-ls-dir {
-    local targets="$( find . -maxdepth 1 -type d | sed -e 's;\./;;' )"
-    if [ $#targets -gt 0 ]
-    then
-        echo $( echo "${targets}" | peco )
-    fi
+function peco-ls-files-insert {
+  find . -maxdepth 1 -type f \
+    | sed -e 's;\./;;' \
+    | anyframe-selector-auto \
+    | anyframe-action-insert
 }
+zle -N peco-ls-files-insert
+
+function peco-ls-dir-insert {
+  find . -maxdepth 1 -type d \
+    | sed -e 's;\./;;' \
+    | anyframe-selector-auto \
+    | anyframe-action-insert
+}
+zle -N peco-ls-dir-insert
+
+function peco-sbt-new {
+  curl https://github.com/foundweekends/giter8/wiki/giter8-templates -s \
+    | grep "\.g8<" \
+    | sed -e "s/</ /g" -e "s/>/ /g" \
+    | awk '{print $3}' \
+    | anyframe-selector-auto \
+    | head -n 1 \
+    | anyframe-action-execute sbt new
+}
+zle -N peco-sbt-new
 
 function peco-ls-img {
-    local targets="$( find . -maxdepth 1 -type f | grep -E '\.(jpg|jpeg|png|bmp|tiff)$' | sed -e 's;\./;;' )"
-    if [ $#targets -gt 0 ]
-    then
-        echo $( echo "${targets}" | peco )
-    fi
+  find . -maxdepth 1 -type f \
+    | grep -E '\.(jpg|jpeg|png|bmp|tiff)$' \
+    | sed -e 's;\./;;' \
+    | anyframe-selector-auto \
+    | anyframe-action-execute open
 }
+zle -N peco-ls-img
 
-function peco-ls-files {
-    local targets="$( find . -maxdepth 1 -type f | sed -e 's;\./;;' )"
-    if [ $#targets -gt 0 ]
-    then
-        echo $( echo "${targets}" | peco )
-    fi
-}
-
-function peco-src () {
-    local selected_dir=$(ghq list --full-path | peco --query "$LBUFFER")
-    if [ -n "$selected_dir" ]; then
-        cd ${selected_dir}
-    fi
-}
-
-function peco-sbt-new() {
-  local TEMPLATE=`curl https://github.com/foundweekends/giter8/wiki/giter8-templates -s | grep "\.g8<" | sed -e "s/</ /g" -e "s/>/ /g" | awk '{print $3}' | peco | head -n 1`
-  if [[ -z "$TEMPLATE" ]]; then
-    return
-  fi
-  sbt new $TEMPLATE
-}
-
-function peco-history-selection() {
-    BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
-    CURSOR=$#BUFFER
-    zle reset-prompt
-}
-zle -N peco-history-selection
-
-alias -g @d='$(peco-ls-dir)'
-alias -g @i='$(peco-ls-img)'
-alias -g @f='$(peco-ls-files)'
-alias -g @D='$(peco-git-changed-files)'
 
 # ------------------------- alias
 alias maketags="ctags --exclude=\".git*\" -R"
@@ -216,6 +192,23 @@ bindkey "^N" history-beginning-search-forward-end
 
 bindkey '^gg' anyframe-widget-cd-ghq-repository
 bindkey '^g^g' anyframe-widget-cd-ghq-repository
+bindkey '^gb' anyframe-widget-checkout-git-branch
+bindkey '^g^b' anyframe-widget-checkout-git-branch
+bindkey '^gh' peco-git-hash-insert
+bindkey '^g^h' peco-git-hash-insert
+bindkey '^gf' peco-git-changed-files-insert
+bindkey '^g^f' peco-git-changed-files-insert
+
+bindkey '^e^k' anyframe-widget-kill
+bindkey '^ek' anyframe-widget-kill
+
+bindkey '^ff' peco-ls-files-insert
+bindkey '^f^f' peco-ls-files-insert
+bindkey '^fd' peco-ls-dir
+bindkey '^f^d' peco-ls-dir
+
+bindkey '^fn' peco-sbt-new
+bindkey '^f^n' peco-sbt-new
 
 # ------------------------- eval envs
 if [ -x "$(command -v anyenv)" ]; then
