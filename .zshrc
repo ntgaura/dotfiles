@@ -217,6 +217,9 @@ fi
 if [ -x "$(command -v direnv)" ]; then
   eval "$(direnv hook zsh)"
 fi
+if [ -x "$(command -v pyenv)" ]; then
+  eval "$(pyenv virtualenv-init -)"
+fi
 # if [ -x "$(command -v kubectl)" ]; then
 #   source <(kubectl completion zsh)
 # fi

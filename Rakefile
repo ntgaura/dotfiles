@@ -46,41 +46,52 @@ namespace :rust do
 end
 
 namespace :anyenv do
-	desc 'Install anyenv'
-	task :install do
+	desc 'Setup anyenv and specific lang-envs'
+	task :setup do
     next if exist? "~/.anyenv"
 
     sh 'git clone https://github.com/riywo/anyenv ~/.anyenv'
     sh 'mkdir -p ~/.anyenv/envs'
     sh 'mkdir -p $(anyenv root)/plugins'
     sh 'git clone https://github.com/znz/anyenv-update.git $(anyenv root)/plugins/anyenv-update'
+
+    sh 'anyenv install -s rbenv'
+    sh 'anyenv install -s pyenv'
+    sh 'anyenv install -s ndenv'
+
+    sh "git clone https://github.com/pyenv/pyenv-virtualenv.git $(anyenv root)/envs/pyenv/plugins/pyenv-virtualenv"
 	end	
 
-  desc 'Install rbenv'
-  task rbenv: [:install] do
-    sh 'anyenv install -s rbenv'
-    sh 'rbenv install -s 2.5.0'
-    sh 'rbenv global 2.5.0'
+  desc 'Install ruby versions by rbenv'
+  task rbenv: [:setup] do
+    sh 'rbenv install -s 2.5.1'
+    sh 'rbenv global 2.5.1'
     sh 'gem install bundler'
   end
 
-  desc 'Install pyenv'
-  task pyenv: [:install] do
-    sh 'anyenv install -s pyenv'
-    sh 'pyenv install -s 2.7.14'
-    sh 'pyenv install -s 3.6.4'
-    sh 'pyenv global 3.6.4'
+  desc 'Install python versions by pyenv'
+  task pyenv: [:setup] do
+    sh 'pyenv install -s 2.7.15'
+    sh 'pyenv virtualenv 2.7.15 neovim2'
+    sh 'pyenv activate neovim2'
+    sh 'pip install neovim'
+
+    sh 'pyenv install -s 3.6.5'
+    sh 'pyenv virtualenv 3.6.5 neovim3'
+    sh 'pyenv activate neovim3'
+    sh 'pip install neovim'
+
+    sh 'pyenv global 3.6.5'
   end
 
-  desc 'Install ndenv'
-  task ndenv: [:install] do
-    sh 'anyenv install -s ndenv'
-    sh 'ndenv install -s v9.8.0'
-    sh 'ndenv global v9.8.0'
+  desc 'Install nodejs versions by ndenv'
+  task ndenv: [:setup] do
+    sh 'ndenv install -s v10.1.0'
+    sh 'ndenv global v10.1.0'
   end
 
-  desc 'Anyenv full setup'
-  task setup: [:install, :rbenv, :pyenv, :ndenv]
+  desc 'Anyenv languages setup'
+  task install: [:rbenv, :pyenv, :ndenv]
 end
 
 namespace :mac do

@@ -46,6 +46,7 @@ if dein#load_state(expand('~/.config/nvim'))
   call dein#add('sebastianmarkow/deoplete-rust')
   call dein#add('rust-lang/rust.vim')
   call dein#add('lighttiger2505/gtags.vim')
+  call dein#add('airblade/vim-gitgutter')
 
   call dein#end()
   call dein#save_state()
