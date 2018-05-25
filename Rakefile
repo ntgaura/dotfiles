@@ -73,13 +73,11 @@ namespace :anyenv do
   task pyenv: [:setup] do
     sh 'pyenv install -s 2.7.15'
     sh 'pyenv virtualenv 2.7.15 neovim2'
-    sh 'pyenv activate neovim2'
-    sh 'pip install neovim'
+    sh 'pyenv shell neovim2; pip install neovim'
 
     sh 'pyenv install -s 3.6.5'
     sh 'pyenv virtualenv 3.6.5 neovim3'
-    sh 'pyenv activate neovim3'
-    sh 'pip install neovim'
+    sh 'pyenv shell neovim3; pip install neovim'
 
     sh 'pyenv global 3.6.5'
   end
