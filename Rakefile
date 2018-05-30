@@ -46,7 +46,7 @@ namespace :rust do
 end
 
 namespace :anyenv do
-	desc 'Setup anyenv and specific lang-envs'
+	desc 'Setup anyenv and envs, envs-plugins'
 	task :setup do
     next if exist? "~/.anyenv"
 
@@ -88,8 +88,8 @@ namespace :anyenv do
     sh 'ndenv global v10.1.0'
   end
 
-  desc 'Anyenv languages setup'
-  task install: [:rbenv, :pyenv, :ndenv]
+  desc 'Install language versions and packages'
+  task packages: [:rbenv, :pyenv, :ndenv]
 end
 
 namespace :mac do
