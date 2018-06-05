@@ -35,3 +35,6 @@ terminal-notifier
 ncdu
 nkf
 exa
+vegeta
+rs/tap/jaggr
+rs/tap/jplot
