@@ -1,4 +1,5 @@
 .ssh
 *.rlg
 *.secret
+*.log
 hidemaru/
