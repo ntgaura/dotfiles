@@ -93,6 +93,7 @@ let mapleader = ' '
 " ---------------------------- keymap
 nnoremap qq <Esc>:q<Cr>
 inoremap <C-;> <Esc>
+inoremap <C-j> <Esc>
 
 nnoremap <C-k> <C-w>k
 nnoremap <C-j> <C-w>j
