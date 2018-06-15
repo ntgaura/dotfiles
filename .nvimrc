@@ -161,6 +161,8 @@ let g:table_mode_corner='|'
 
 MyAutocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
 
+" php settings
+MyAutocmd FileType php setlocal shiftwidth=4 softtabstop=4 expandtab
 
 
 " ---------------------------- quickrun
