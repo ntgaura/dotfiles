@@ -145,6 +145,15 @@ function peco-ls-dir-insert {
 }
 zle -N peco-ls-dir-insert
 
+function peco-find-files-insert {
+  find . -type f \
+    | sed -e 's;\./;;' \
+    | sed -e 's;\.git;;' \
+    | anyframe-selector-auto \
+    | anyframe-action-insert
+}
+zle -N peco-find-files-insert
+
 function peco-sbt-new {
   curl https://github.com/foundweekends/giter8/wiki/giter8-templates -s \
     | grep "\.g8<" \
@@ -202,8 +211,8 @@ bindkey '^g^f' peco-git-changed-files-insert
 bindkey '^e^k' anyframe-widget-kill
 bindkey '^ek' anyframe-widget-kill
 
-bindkey '^ff' peco-ls-files-insert
-bindkey '^f^f' peco-ls-files-insert
+bindkey '^ff' peco-find-files-insert
+bindkey '^f^f' peco-find-files-insert
 bindkey '^fd' peco-ls-dir
 bindkey '^f^d' peco-ls-dir
 
