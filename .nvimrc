@@ -86,6 +86,11 @@ set expandtab
 set clipboard=unnamed
 set nofoldenable
 set sh=zsh
+set ignorecase
+set smartcase
+set wrapscan
+set incsearch
+set inccommand=split
 
 " ---------------------------- Leader
 let mapleader = ' '
