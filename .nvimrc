@@ -177,6 +177,11 @@ let g:quickrun_config.cpp = {
       \ 'type': 'cpp',
       \ 'cmdopt': '-std=c++11'
       \ }
+let g:quickrun_config['ruby.bundle'] = {
+      \ 'command': 'ruby',
+      \ 'cmdopt': 'bundle exec',
+      \ 'exec': '%o %c %s'
+      \ }
 
 " ---------------------------- indent-guides
 let g:indent_guides_enable_on_vim_startup = 1
